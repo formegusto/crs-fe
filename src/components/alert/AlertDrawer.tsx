@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ConnectedProps } from "react-redux";
 import UIConnector from "../../store/ui/connector";
+import AlertTable from "./AlertTable";
 
 type Props = ConnectedProps<typeof UIConnector>;
 function AlertDrawer({ drawer, hideDrawer }: Props) {
@@ -36,6 +37,7 @@ function AlertDrawer({ drawer, hideDrawer }: Props) {
         <Text textStyle="h4" padding="8px 20px 16px">
           알림
         </Text>
+        <AlertTable />
       </DrawerContent>
     </Drawer>
   );
