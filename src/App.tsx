@@ -1,7 +1,12 @@
-import React from "react";
+import { Box } from "@chakra-ui/react";
+import HeaderComponent from "./components/common/HeaderComponent";
 
 function App() {
-  return <></>;
+  return (
+    <Box>
+      <HeaderComponent />
+    </Box>
+  );
 }
 
 export default App;

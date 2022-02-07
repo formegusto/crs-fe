@@ -6,13 +6,13 @@ let mainWindow: BrowserWindow;
 
 const createWindow = () => {
   mainWindow = new BrowserWindow({
-    width: 900,
-    height: 680,
+    width: 1060,
+    height: 720,
     center: true,
-    kiosk: !isDev,
-    resizable: true,
+    kiosk: false,
+    resizable: false,
     fullscreen: false,
-    fullscreenable: true,
+    fullscreenable: false,
     webPreferences: {
       // node환경처럼 사용하기
       nodeIntegration: true,
@@ -33,7 +33,7 @@ const createWindow = () => {
     mainWindow.webContents.openDevTools({ mode: "detach" });
   }
 
-  mainWindow.setResizable(true);
+  mainWindow.setResizable(false);
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => (mainWindow = undefined!));
