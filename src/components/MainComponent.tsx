@@ -1,6 +1,26 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Text } from "@chakra-ui/react";
+import { ConnectedProps } from "react-redux";
+import UIConnector from "../store/ui/connector";
 import Report from "./report/Report";
+
+type Props = ConnectedProps<typeof UIConnector>;
+function _RegistBtn({ showDrawer }: Props) {
+  return (
+    <IconButton
+      color="modetext"
+      bgColor="transparent"
+      aria-label="new-report"
+      onClick={() =>
+        showDrawer({
+          type: "regist",
+        })
+      }
+      icon={<AddIcon />}
+    />
+  );
+}
+const RegistBtn = UIConnector(_RegistBtn);
 
 function MainComponent() {
   return (
@@ -22,12 +42,7 @@ function MainComponent() {
         <Text fontSize="h5" fontWeight="bold" color="modetext">
           최근 보고서
         </Text>
-        <IconButton
-          color="modetext"
-          bgColor="transparent"
-          aria-label="new-report"
-          icon={<AddIcon />}
-        />
+        <RegistBtn />
       </Box>
       <Report />
     </Box>

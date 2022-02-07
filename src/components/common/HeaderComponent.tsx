@@ -6,11 +6,15 @@ import {
   usePrefersReducedMotion,
 } from "@chakra-ui/react";
 import { ChevronLeftIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
-import AlertButton from "./AlertButton";
+import AlertButton from "../alert/AlertButton";
 import { useLocation, useNavigate } from "react-router-dom";
 import { moveRightToLeft } from "../../animations/move";
+import UIConnector from "../../store/ui/connector";
+import { ConnectedProps } from "react-redux";
 
-function Icons() {
+type Props = ConnectedProps<typeof UIConnector>;
+
+function _Icons({ showDrawer }: Props) {
   const { colorMode, setColorMode } = useColorMode();
 
   return (
@@ -22,7 +26,14 @@ function Icons() {
         },
       }}
     >
-      <AlertButton />
+      <AlertButton
+        aria-label="alert"
+        onClick={() =>
+          showDrawer({
+            type: "alert",
+          })
+        }
+      />
       {colorMode === "light" ? (
         <IconButton
           color="modetext"
@@ -45,6 +56,7 @@ function Icons() {
     </Box>
   );
 }
+const Icons = UIConnector(_Icons);
 
 function HeaderComponent() {
   const { pathname } = useLocation();
@@ -81,7 +93,6 @@ function HeaderComponent() {
           icon={<ChevronLeftIcon />}
         />
       )}
-
       <Icons />
     </Box>
   );

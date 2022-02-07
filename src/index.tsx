@@ -4,14 +4,22 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
+import rootReducer from "./store";
+import { composeWithDevTools } from "redux-devtools-extension";
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+
+const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
-  <ChakraProvider theme={theme}>
-    <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <Router>
-      <App />
-    </Router>
-  </ChakraProvider>,
+  <Provider store={store}>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <Router>
+        <App />
+      </Router>
+    </ChakraProvider>
+  </Provider>,
   document.getElementById("root")
 );
 

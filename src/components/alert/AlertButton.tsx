@@ -1,16 +1,16 @@
 import { BellIcon } from "@chakra-ui/icons";
-import { Box, IconButton } from "@chakra-ui/react";
+import { Box, IconButton, IconButtonProps } from "@chakra-ui/react";
 
-function AlertButton() {
+function AlertButton(props: IconButtonProps) {
   return (
     <Box width="40px" height="40px" position="relative">
       <IconButton
         position="absolute"
         color="modern.200"
         fontSize="h3"
-        aria-label="alert"
         bgColor="transparent"
         icon={<BellIcon />}
+        {...props}
       />
       <Box
         position="absolute"
