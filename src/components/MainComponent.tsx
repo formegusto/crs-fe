@@ -1,14 +1,17 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Text } from "@chakra-ui/react";
+import Report from "./report/Report";
 
 function MainComponent() {
   return (
     <Box
-      flex="1"
+      display="flex"
+      flexDirection="column"
       bgColor="modebox"
       margin="16px 40px 0"
       padding="0 28px 0"
       borderRadius="16px"
+      height="560px"
     >
       <Box
         display="flex"
@@ -26,6 +29,7 @@ function MainComponent() {
           icon={<AddIcon />}
         />
       </Box>
+      <Report />
     </Box>
   );
 }

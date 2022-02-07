@@ -9,6 +9,9 @@ const ColorTheme = {
       500: "#202020",
       600: "#121215",
     },
+    border: {
+      50: "#E2E8F0",
+    },
     bg: {
       light: "#EEF1F4",
       dark: "#0A0A0B",
