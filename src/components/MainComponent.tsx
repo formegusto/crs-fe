@@ -8,10 +8,10 @@ function MainComponent() {
       display="flex"
       flexDirection="column"
       bgColor="modebox"
-      margin="16px 40px 0"
+      margin="0 40px 0"
       padding="0 28px 0"
       borderRadius="16px"
-      height="560px"
+      height="576px"
     >
       <Box
         display="flex"

@@ -3,11 +3,14 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
+import { BrowserRouter as Router } from "react-router-dom";
 
 ReactDOM.render(
   <ChakraProvider theme={theme}>
     <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-    <App />
+    <Router>
+      <App />
+    </Router>
   </ChakraProvider>,
   document.getElementById("root")
 );

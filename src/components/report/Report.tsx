@@ -9,10 +9,10 @@ function Report() {
       flex="1"
       overflowY="scroll"
       sx={{
-        ".report-item": {
+        a: {
           marginBottom: "16px",
         },
-        ".report-item:not(:nth-child(3n))": {
+        "a:not(:nth-of-type(3n))": {
           marginRight: "24px",
         },
       }}

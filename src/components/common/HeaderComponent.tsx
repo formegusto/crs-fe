@@ -1,6 +1,14 @@
-import { Box, IconButton, Text, useColorMode } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {
+  Box,
+  IconButton,
+  Text,
+  useColorMode,
+  usePrefersReducedMotion,
+} from "@chakra-ui/react";
+import { ChevronLeftIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import AlertButton from "./AlertButton";
+import { useLocation, useNavigate } from "react-router-dom";
+import { moveRightToLeft } from "../../animations/move";
 
 function Icons() {
   const { colorMode, setColorMode } = useColorMode();
@@ -39,20 +47,41 @@ function Icons() {
 }
 
 function HeaderComponent() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  const backBtnAni = prefersReducedMotion
+    ? undefined
+    : `${moveRightToLeft} .3s linear forwards`;
+
   return (
     <Box
       display="flex"
       alignItems="center"
-      height="70px"
+      height="100px"
       justifyContent="space-between"
       sx={{
         padding: "0 40px 0",
         boxSizing: "border-box",
       }}
     >
-      <Text fontSize="h4" fontWeight="bold" color="modern.200">
-        Contract Recomment System
-      </Text>
+      {pathname === "/" ? (
+        <Text fontSize="h4" fontWeight="bold" color="modern.200">
+          Contract Recomment System
+        </Text>
+      ) : (
+        <IconButton
+          color="modern.200"
+          fontSize="h2"
+          aria-label="back-btn"
+          bgColor="transparent"
+          onClick={() => navigate("/")}
+          animation={backBtnAni}
+          icon={<ChevronLeftIcon />}
+        />
+      )}
+
       <Icons />
     </Box>
   );

@@ -7,7 +7,7 @@ function ResLogo() {
   return (
     <Image
       src={colorMode === "light" ? Assets.Logo.color : Assets.Logo.white}
-      width="150px"
+      width="160px"
     />
   );
 }
@@ -17,7 +17,7 @@ function FooterComponent() {
     <Box
       display="flex"
       alignItems="center"
-      height="70px"
+      height="80px"
       justifyContent="flex-end"
       sx={{
         padding: "0 40px 0",
