@@ -1,8 +1,22 @@
-import { extendTheme } from "@chakra-ui/react";
+import { extendTheme, ThemeConfig } from "@chakra-ui/react";
 import ColorTheme from "./colors";
 import FontTheme from "./fonts";
 import GlobalTheme from "./global";
+import TokenTheme from "./tokens";
 
-const theme = extendTheme(GlobalTheme, ColorTheme, FontTheme);
+const config: ThemeConfig = {
+  initialColorMode: "light",
+  useSystemColorMode: false,
+};
+
+const theme = extendTheme(
+  {
+    config,
+  },
+  GlobalTheme,
+  ColorTheme,
+  FontTheme,
+  TokenTheme
+);
 
 export default theme;

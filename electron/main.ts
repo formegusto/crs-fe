@@ -19,6 +19,7 @@ const createWindow = () => {
       // 개발자도구
       devTools: isDev,
     },
+    titleBarStyle: "hidden",
   });
 
   // production에서는 패키지 내부 리소스에 접근.
