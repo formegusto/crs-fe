@@ -1,5 +1,7 @@
+import RecoReportComponent from "../components/RecoReportComponent";
+
 function ReportPage() {
-  return <>레포트 페이지</>;
+  return <RecoReportComponent />;
 }
 
 export default ReportPage;

@@ -71,12 +71,15 @@ function HeaderComponent() {
     <Box
       display="flex"
       alignItems="center"
-      height="100px"
+      minHeight="100px"
       justifyContent="space-between"
       sx={{
         padding: "0 40px 0",
         boxSizing: "border-box",
       }}
+      {...(pathname !== "/" && {
+        bgColor: "modebox",
+      })}
     >
       {pathname === "/" ? (
         <Text fontSize="h4" fontWeight="bold" color="modern.200">

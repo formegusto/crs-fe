@@ -13,6 +13,10 @@ const TokenTheme = {
         _light: "#E2E8F0",
         _dark: "#2A2B32",
       },
+      modehead: {
+        _light: "modern.200",
+        _dark: "modern.50",
+      },
     },
   },
 };

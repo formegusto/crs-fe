@@ -17,7 +17,7 @@ function FooterComponent() {
     <Box
       display="flex"
       alignItems="center"
-      height="80px"
+      minHeight="80px"
       justifyContent="flex-end"
       sx={{
         padding: "0 40px 0",
