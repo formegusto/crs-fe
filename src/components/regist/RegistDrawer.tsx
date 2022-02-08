@@ -7,17 +7,21 @@ import {
   IconButton,
   Text,
 } from "@chakra-ui/react";
+import React from "react";
 import { ConnectedProps } from "react-redux";
 import UIConnector from "../../store/ui/connector";
+import RegistForm from "./RegistForm";
 
 type Props = ConnectedProps<typeof UIConnector>;
 function RegistDrawer({ drawer, hideDrawer }: Props) {
+  const initialFocus = React.useRef<any>();
   return (
     <Drawer
       placement="right"
       isOpen={
         drawer !== undefined && drawer !== null && drawer.type === "regist"
       }
+      initialFocusRef={initialFocus}
       onClose={hideDrawer}
       size="sm"
     >
@@ -36,6 +40,7 @@ function RegistDrawer({ drawer, hideDrawer }: Props) {
         <Text textStyle="h4" padding="8px 20px 16px">
           시뮬레이션 등록
         </Text>
+        <RegistForm initialFocus={initialFocus} />
       </DrawerContent>
     </Drawer>
   );

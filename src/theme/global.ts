@@ -11,6 +11,12 @@ const GlobalTheme = {
       body: {
         background: mode("bg.light", "bg.dark")(props),
       },
+      "*": {
+        "-ms-overflow-style": "none",
+      },
+      "*::-webkit-scrollbar": {
+        display: "none",
+      },
     }),
   },
 };

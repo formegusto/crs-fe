@@ -21,6 +21,12 @@ const ColorTheme = {
       green: "#1EBF6C",
       blue: "#2768F2",
     },
+    blueinput: {
+      200: "#3B6CF5",
+      300: "#195AE3",
+      500: "#3968E9",
+      600: "#195AE3",
+    },
   },
 };
 
