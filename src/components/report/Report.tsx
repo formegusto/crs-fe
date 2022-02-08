@@ -1,8 +1,20 @@
 import { Box } from "@chakra-ui/react";
+import React from "react";
 import ReportItem from "./ReportItem";
+import ReportSkeleton from "./ReportSkeleton";
 
 function Report() {
-  return (
+  const [loading, setLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
+  return loading ? (
+    <ReportSkeleton />
+  ) : (
     <Box
       display="flex"
       flexWrap="wrap"
