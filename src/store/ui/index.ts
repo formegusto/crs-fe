@@ -4,13 +4,11 @@ import { ControlDrawer, HIDE_DRAWER, SHOW_DRAWER } from "./types";
 type UIStore = {
   drawer?: ControlDrawer | null;
 };
+type Payload = ControlDrawer;
 
 const store: UIStore = {
   drawer: null,
 };
-
-type Payload = ControlDrawer;
-
 const UIReducer = handleActions<UIStore, Payload>(
   {
     [SHOW_DRAWER]: (state, action) => ({

@@ -8,6 +8,7 @@ import rootReducer from "./store";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
+import SocketListener from "./containers/SocketListener";
 
 const store = createStore(rootReducer, composeWithDevTools());
 
@@ -15,6 +16,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <SocketListener />
       <Router>
         <App />
       </Router>
