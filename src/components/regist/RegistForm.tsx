@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Icon,
@@ -19,22 +20,44 @@ import {
   IoReturnDownForward,
 } from "react-icons/io5";
 import React from "react";
+import { Controller, useForm } from "react-hook-form";
 
 type Props = {
   initialFocus: React.Ref<any>;
 };
 
 function RegistForm({ initialFocus }: Props) {
+  const { control, handleSubmit } = useForm();
+  const [filename, setFilename] = React.useState<string>("");
+  const [range, setRange] = React.useState<Array<number>>([20, 80]);
+
+  const onSubmit = React.useCallback((data: any) => {
+    console.log(data);
+  }, []);
+
   return (
-    <Flex as="form">
+    <Flex as="form" onSubmit={handleSubmit(onSubmit)}>
       <Flex margin="8px 20px 0" direction="column">
-        <Input
-          ref={initialFocus}
-          size="md"
-          variant="unstyled"
-          placeholder="제목을 입력해주세요."
-          textStyle="p1"
+        <Controller
+          name="title"
+          control={control}
+          defaultValue=""
+          render={({ field }) => (
+            <Input
+              type="text"
+              size="md"
+              variant="unstyled"
+              placeholder="제목을 입력해주세요."
+              textStyle="p1"
+              autoFocus
+              {...field}
+              ref={() => {
+                initialFocus = field.ref;
+              }}
+            />
+          )}
         />
+
         {/* Reference Cell */}
         <Flex direction="column" marginTop="24px">
           <Flex direction="row" height="18px" align="center" marginBottom="8px">
@@ -77,15 +100,40 @@ function RegistForm({ initialFocus }: Props) {
             <Input
               variant="flushed"
               placeholder="1년치 15분 측정 엑셀 파일을 업로드 해주세요."
+              readOnly
+              value={filename}
+              textStyle="p1"
             />
             <Button
               colorScheme="blueinput"
               color="modern.50"
               fontSize="p2"
               minWidth="90px"
+              as="label"
+              htmlFor="data"
+              cursor="pointer"
             >
               파일 선택하기
             </Button>
+            <Controller
+              name="data"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  type="file"
+                  id="data"
+                  display="none"
+                  onChange={(e) => {
+                    if (e.target.files) {
+                      setFilename(e.target.files[0].name);
+                      return field.onChange(e.target.files[0]);
+                    } else {
+                      return;
+                    }
+                  }}
+                />
+              )}
+            />
           </Flex>
         </Flex>
         <Flex direction="row" height="14px" align="center" marginTop="24px">
@@ -96,7 +144,8 @@ function RegistForm({ initialFocus }: Props) {
         </Flex>
         <RangeSlider
           colorScheme="blueinput"
-          defaultValue={[20, 80]}
+          onChange={setRange}
+          defaultValue={range}
           marginTop="14px"
           min={10}
           max={90}
@@ -104,12 +153,20 @@ function RegistForm({ initialFocus }: Props) {
           <RangeSliderTrack>
             <RangeSliderFilledTrack />
           </RangeSliderTrack>
-          <RangeSliderThumb index={0} />
-          <RangeSliderThumb index={1} />
+          <RangeSliderThumb index={0}>
+            <Box textStyle="p3" transform="translateY(18px)">
+              {range[0]}%
+            </Box>
+          </RangeSliderThumb>
+          <RangeSliderThumb index={1}>
+            <Box textStyle="p3" transform="translateY(18px)">
+              {range[1]}%
+            </Box>
+          </RangeSliderThumb>
         </RangeSlider>
         <Flex
           direction="row"
-          marginTop="14px"
+          marginTop="26px"
           color="modetext"
           paddingRight="14px"
         >
@@ -130,6 +187,7 @@ function RegistForm({ initialFocus }: Props) {
         fontSize="p2"
         minWidth="100%"
         borderRadius={0}
+        type="submit"
       >
         등록하기
       </Button>

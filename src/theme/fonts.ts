@@ -48,6 +48,12 @@ const FontTheme = {
       fontWeight: "medium",
       color: "modetext",
     },
+    p3: {
+      fontSize: "10px",
+      lineHeight: "14px",
+      fontWeight: "medium",
+      color: "modetext",
+    },
   },
   fontSizes: {
     h1: "36px",

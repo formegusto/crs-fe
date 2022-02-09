@@ -12,10 +12,14 @@ const GlobalTheme = {
         background: mode("bg.light", "bg.dark")(props),
       },
       "*": {
-        "-ms-overflow-style": "none",
+        msOverflowStyle: "none",
       },
       "*::-webkit-scrollbar": {
         display: "none",
+      },
+      ".chakra-alert": {
+        background: mode("#fff !important", "#121215 !important")(props),
+        color: mode("#202020 !important", "#fff !important")(props),
       },
     }),
   },
