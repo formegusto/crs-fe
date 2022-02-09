@@ -21,19 +21,28 @@ import {
 } from "react-icons/io5";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
+import ProcessConnector from "../../store/process/connector";
+import { ConnectedProps } from "react-redux";
 
-type Props = {
+type Props = ConnectedProps<typeof ProcessConnector> & {
   initialFocus: React.Ref<any>;
 };
 
-function RegistForm({ initialFocus }: Props) {
+function RegistForm({ regist, initialFocus }: Props) {
   const { control, handleSubmit } = useForm();
   const [filename, setFilename] = React.useState<string>("");
   const [range, setRange] = React.useState<Array<number>>([20, 80]);
 
-  const onSubmit = React.useCallback((data: any) => {
-    console.log(data);
-  }, []);
+  const onSubmit = React.useCallback(
+    (data: any) => {
+      regist({
+        ...data,
+        minPer: range[0],
+        maxPer: range[1],
+      });
+    },
+    [regist, range]
+  );
 
   return (
     <Flex as="form" onSubmit={handleSubmit(onSubmit)}>
@@ -195,4 +204,4 @@ function RegistForm({ initialFocus }: Props) {
   );
 }
 
-export default RegistForm;
+export default ProcessConnector(RegistForm);

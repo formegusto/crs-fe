@@ -6,11 +6,18 @@ import theme from "./theme";
 import { BrowserRouter as Router } from "react-router-dom";
 import rootReducer from "./store";
 import { composeWithDevTools } from "redux-devtools-extension";
-import { createStore } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import { Provider } from "react-redux";
 import SocketListener from "./containers/SocketListener";
+import createSagaMW from "redux-saga";
+import RootSaga from "./store/saga";
 
-const store = createStore(rootReducer, composeWithDevTools());
+const sagaMW = createSagaMW();
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(sagaMW))
+);
+sagaMW.run(RootSaga);
 
 ReactDOM.render(
   <Provider store={store}>
