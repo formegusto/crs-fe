@@ -35,12 +35,9 @@ function ReportSkeleton() {
         },
       }}
     >
-      <ReportSkeletonItem />
-      <ReportSkeletonItem />
-      <ReportSkeletonItem />
-      <ReportSkeletonItem />
-      <ReportSkeletonItem />
-      <ReportSkeletonItem />
+      {Array.from({ length: 6 }).map((_, idx) => (
+        <ReportSkeletonItem key={idx} />
+      ))}
     </Box>
   );
 }

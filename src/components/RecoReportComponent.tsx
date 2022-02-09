@@ -74,18 +74,22 @@ function RecoReportItem({
   return (
     <Box bgColor="modebox">
       {title && (
-        <Text textStyle="h3" color="modehead" margin="16px 48px 24px">
+        <Text className="title" textStyle="h3" color="modehead">
           {title}
         </Text>
       )}
       <Flex
         direction="row"
-        margin={`${title ? "0" : "36px"} 48px 48px`}
+        margin={`${title ? "0" : "36px"} 48px 32px`}
         wrap="wrap"
         sx={{
           "& > *": {
-            width: "482px",
-            height: "calc(482px / 2)",
+            minWidth: "466px",
+            minHeight: "calc(482px / 2)",
+            marginBottom: "16px",
+          },
+          "& > *:nth-of-type(1n)": {
+            marginRight: "16px",
           },
           "& .single,.comp": {
             fontWeight: "bold",
@@ -115,6 +119,12 @@ function RecoReportComponent() {
       sx={{
         "& > :not(:last-child)": {
           margin: "0 0 24px",
+        },
+        "& > :first-of-type > .title": {
+          margin: "0px 48px 24px",
+        },
+        "& > :not(:first-of-type) > .title": {
+          margin: "32px 48px 24px",
         },
       }}
     >
@@ -161,8 +171,11 @@ function RecoReportComponent() {
           <br />
           평균 손해율 분석 결과입니다.
         </Text>
-        <Flex alignItems="center" justify="center">
-          <ResponsiveContainer width="100%" height="100%">
+        <Flex alignItems="center" justify="center" direction="column">
+          <Text textStyle="h5" width="100%">
+            아파트 전체 요금
+          </Text>
+          <ResponsiveContainer width="100%" height={241}>
             <LineChart data={data}>
               <XAxis dataKey="name" hide />
               <ReferenceLine x="Page D" stroke={graph.red} />
@@ -184,9 +197,17 @@ function RecoReportComponent() {
               />
             </LineChart>
           </ResponsiveContainer>
+          <Text textStyle="p2" width="100%">
+            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
+            <span className="single">단일계약</span> 이하는{" "}
+            <span className="comp">종합계약</span>이 적합해요.
+          </Text>
         </Flex>
-        <Flex alignItems="center" justify="center">
-          <ResponsiveContainer width="100%" height="100%">
+        <Flex alignItems="center" justify="center" direction="column">
+          <Text textStyle="h5" width="100%">
+            아파트 전체 요금
+          </Text>
+          <ResponsiveContainer width="100%" height={241}>
             <LineChart data={data}>
               <XAxis dataKey="name" hide />
               <ReferenceLine x="Page D" stroke={graph.red} />
@@ -208,9 +229,17 @@ function RecoReportComponent() {
               />
             </LineChart>
           </ResponsiveContainer>
+          <Text textStyle="p2" width="100%">
+            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
+            <span className="single">단일계약</span> 이하는{" "}
+            <span className="comp">종합계약</span>이 적합해요.
+          </Text>
         </Flex>
-        <Flex alignItems="center" justify="center">
-          <ResponsiveContainer width="100%" height="100%">
+        <Flex alignItems="center" justify="center" direction="column">
+          <Text textStyle="h5" width="100%">
+            아파트 전체 요금
+          </Text>
+          <ResponsiveContainer width="100%" height={241}>
             <LineChart data={data}>
               <XAxis dataKey="name" hide />
               <ReferenceLine x="Page D" stroke={graph.red} />
@@ -232,6 +261,11 @@ function RecoReportComponent() {
               />
             </LineChart>
           </ResponsiveContainer>
+          <Text textStyle="p2" width="100%">
+            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
+            <span className="single">단일계약</span> 이하는{" "}
+            <span className="comp">종합계약</span>이 적합해요.
+          </Text>
         </Flex>
       </RecoReportItem>
       <RecoReportItem title="가구별 평균 한 달 사용량 분포">
