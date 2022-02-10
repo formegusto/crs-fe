@@ -11,8 +11,8 @@ export default function createRequestSaga<P = any, AR = any>(
   type: string,
   request: (...params: P[]) => Promise<AxiosResponse<AR>>
 ) {
-  const SUCCESS = `${type}_SUCCESS`;
-  const FAILURE = `${type}_FAILURE`;
+  const SUCCESS = `${type}/success`;
+  const FAILURE = `${type}/failure`;
 
   return function* (action: SagaAction<P>) {
     try {

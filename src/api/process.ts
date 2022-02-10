@@ -1,6 +1,8 @@
 import { Regist } from "../store/process/types";
 import client from "../utils/client";
 
+const BASE_PATH = "/process";
+
 export const regist = (data: Regist) => {
   const formData: FormData = new FormData();
 
@@ -11,3 +13,4 @@ export const regist = (data: Regist) => {
 
   return client.post("/", formData);
 };
+export const getProcessList = () => client.get(BASE_PATH);

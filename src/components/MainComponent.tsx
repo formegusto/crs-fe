@@ -2,10 +2,11 @@ import { AddIcon } from "@chakra-ui/icons";
 import { Box, IconButton, Text } from "@chakra-ui/react";
 import { ConnectedProps } from "react-redux";
 import UIConnector from "../store/ui/connector";
+import ProcessConnector from "../store/process/connector";
 import Report from "./report/Report";
 
-type Props = ConnectedProps<typeof UIConnector>;
-function _RegistBtn({ showDrawer }: Props) {
+type BtnProps = ConnectedProps<typeof UIConnector>;
+function _RegistBtn({ showDrawer }: BtnProps) {
   return (
     <IconButton
       color="modetext"
@@ -49,4 +50,4 @@ function MainComponent() {
   );
 }
 
-export default MainComponent;
+export default ProcessConnector(MainComponent);

@@ -1,16 +1,25 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
+import { ConnectedProps } from "react-redux";
+import ProcessConnector from "../../store/process/connector";
 import ReportItem from "./ReportItem";
 import ReportSkeleton from "./ReportSkeleton";
 
-function Report() {
+type Props = ConnectedProps<typeof ProcessConnector>;
+function Report({ getProcessList, reports }: Props) {
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-  }, []);
+    getProcessList();
+  }, [getProcessList]);
+
+  React.useEffect(() => {
+    if (reports) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+    }
+  }, [reports]);
 
   return loading ? (
     <ReportSkeleton />
@@ -29,14 +38,11 @@ function Report() {
         },
       }}
     >
-      <ReportItem />
-      <ReportItem />
-      <ReportItem />
-      <ReportItem />
-      <ReportItem />
-      <ReportItem />
+      {reports?.map((r) => (
+        <ReportItem key={r._id} />
+      ))}
     </Box>
   );
 }
 
-export default Report;
+export default ProcessConnector(Report);

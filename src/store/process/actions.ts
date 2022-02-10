@@ -1,4 +1,5 @@
 import { createAction } from "redux-actions";
-import { REGIST, Regist } from "./types";
+import { GET_PROCESS_LIST, REGIST, Regist } from "./types";
 
+export const getProcessList = createAction(GET_PROCESS_LIST);
 export const regist = createAction<Regist>(REGIST);
