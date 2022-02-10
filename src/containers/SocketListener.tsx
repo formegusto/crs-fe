@@ -2,9 +2,10 @@ import React from "react";
 import { ConnectedProps } from "react-redux";
 import { connect, Socket } from "socket.io-client";
 import ConfigConnector from "../store/config/connector";
+import { Alert } from "../store/ui/types";
 
 type Props = ConnectedProps<typeof ConfigConnector>;
-function SocketListener({ socket, connectSocket }: Props) {
+function SocketListener({ newAlert, socket, connectSocket }: Props) {
   React.useEffect(() => {
     if (!socket) {
       const API_SERVER = process.env.REACT_APP_API_SERVER;
@@ -17,9 +18,14 @@ function SocketListener({ socket, connectSocket }: Props) {
 
       io.on("connect", () => {
         connectSocket(io);
+
+        io.on("alert", (data: Alert) => {
+          newAlert(data);
+        });
       });
     }
-  }, [socket, connectSocket]);
+  }, [socket, connectSocket, newAlert]);
+
   return <></>;
 }
 

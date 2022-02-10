@@ -39,7 +39,7 @@ function Report({ getProcessList, reports }: Props) {
       }}
     >
       {reports?.map((r) => (
-        <ReportItem key={r._id} />
+        <ReportItem key={r._id} originalReport={r} />
       ))}
     </Box>
   );
