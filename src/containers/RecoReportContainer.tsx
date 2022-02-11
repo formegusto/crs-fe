@@ -8,13 +8,15 @@ import ProcessConnector from "../store/process/connector";
 type Props = ConnectedProps<typeof ProcessConnector>;
 function RecoReportContainer({ report, getProcess, initProcess }: Props) {
   const [loading, setLoading] = React.useState<boolean>(true);
-  const {
-    state: { id },
-  } = useLocation() as any;
+  const { state } = useLocation() as any;
 
   React.useEffect(() => {
-    getProcess(id);
-  }, [getProcess, id]);
+    if (state) {
+      const { id } = state;
+
+      getProcess(id);
+    }
+  }, [getProcess, state]);
 
   React.useEffect(() => {
     if (report) {

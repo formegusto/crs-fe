@@ -1,9 +1,6 @@
 import { ReportStep } from "../process/types";
 
-export const PosGraphStep: ReportStep[] = [
-  "mean-analysis",
-  "similarity-analysis",
-];
+export const PosGraphStep: ReportStep[] = ["similarity-analysis"];
 
 export const stepToName: { [type: string]: string } = {
   init: "초기화",

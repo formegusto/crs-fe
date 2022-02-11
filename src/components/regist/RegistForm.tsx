@@ -26,9 +26,10 @@ import { ConnectedProps } from "react-redux";
 
 type Props = ConnectedProps<typeof ProcessConnector> & {
   initialFocus: React.Ref<any>;
+  hideDrawer: () => void;
 };
 
-function RegistForm({ regist, initialFocus }: Props) {
+function RegistForm({ regist, initialFocus, hideDrawer }: Props) {
   const { control, handleSubmit } = useForm();
   const [filename, setFilename] = React.useState<string>("");
   const [range, setRange] = React.useState<Array<number>>([20, 80]);
@@ -40,8 +41,10 @@ function RegistForm({ regist, initialFocus }: Props) {
         minPer: range[0],
         maxPer: range[1],
       });
+
+      hideDrawer();
     },
-    [regist, range]
+    [regist, range, hideDrawer]
   );
 
   return (

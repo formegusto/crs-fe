@@ -42,11 +42,11 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
 
   const changeReport = React.useCallback(async () => {
     try {
+      confirmAlert();
       const res = await API["process"].getProcess(id[0]);
       const newReport = res.data.data as any;
 
       setReport(newReport);
-      confirmAlert();
     } catch (err) {
       console.error(err);
     }
@@ -65,7 +65,7 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
     <Link
       to="/report"
       state={{
-        id: id,
+        id: id[0],
       }}
     >
       <Box

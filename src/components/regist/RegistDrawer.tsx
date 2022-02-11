@@ -40,7 +40,7 @@ function RegistDrawer({ drawer, hideDrawer }: Props) {
         <Text textStyle="h4" padding="8px 20px 16px">
           시뮬레이션 등록
         </Text>
-        <RegistForm initialFocus={initialFocus} />
+        <RegistForm initialFocus={initialFocus} hideDrawer={hideDrawer} />
       </DrawerContent>
     </Drawer>
   );

@@ -26,6 +26,8 @@ export type ReportBase = {
   step: ReportStep;
   createdAt: string;
   updatedAt: string;
+  recoPercentage?: number;
+  kwh?: number;
 };
 
 // Redux Action Types
