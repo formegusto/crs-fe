@@ -8,6 +8,24 @@ export type Regist = {
   maxPer: number;
 };
 
+export type PercentageItem = {
+  percentage: number;
+  comp: number;
+  single: number;
+};
+
+export type ChangePer = {
+  [key: string]: number;
+};
+
+export type Analysis = {
+  positiveCount: PercentageItem[];
+  lossRatio: PercentageItem[];
+  bill: PercentageItem[];
+  publicBill: PercentageItem[];
+  changePer: ChangePer;
+};
+
 export type ReportStep =
   | "init"
   | "start"
@@ -28,6 +46,8 @@ export type ReportBase = {
   updatedAt: string;
   recoPercentage?: number;
   kwh?: number;
+  meanAnalysis?: Analysis;
+  simAnalysis?: Analysis;
 };
 
 // Redux Action Types

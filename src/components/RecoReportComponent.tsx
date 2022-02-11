@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   XAxis,
 } from "recharts";
+import { ReportBase } from "../store/process/types";
 
 type ItemProps = {
   title?: string;
@@ -108,7 +109,8 @@ function RecoReportItem({
   );
 }
 
-function RecoReportComponent() {
+type Props = ReportBase;
+function RecoReportComponent({ recoPercentage, meanAnalysis }: Props) {
   const {
     colors: { graph },
   } = useTheme();
@@ -132,7 +134,7 @@ function RecoReportComponent() {
         <Text textStyle="h2" fontWeight="thin">
           공동설비사용량
           <br />
-          <b>35%</b>를 기준으로
+          <b>{recoPercentage}%</b>를 기준으로
           <br />
           이상은 <span className="single">단일계약</span>
           <br />
@@ -140,12 +142,15 @@ function RecoReportComponent() {
         </Text>
         <Flex alignItems="center" justify="center">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
-              <XAxis dataKey="name" hide />
-              <ReferenceLine x="Page D" stroke={graph.red} />
+            <LineChart data={meanAnalysis!.positiveCount}>
+              <XAxis dataKey="percentage" hide />
+              <ReferenceLine
+                x={meanAnalysis!.changePer.positiveCount}
+                stroke={graph.red}
+              />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="comp"
                 stroke={graph.red}
                 dot={false}
                 animationDuration={1500}
@@ -153,7 +158,7 @@ function RecoReportComponent() {
               />
               <Line
                 type="monotone"
-                dataKey="pv"
+                dataKey="single"
                 stroke={graph.blue}
                 dot={false}
                 animationDuration={1500}
@@ -176,12 +181,15 @@ function RecoReportComponent() {
             아파트 전체 요금
           </Text>
           <ResponsiveContainer width="100%" height={241}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" hide />
-              <ReferenceLine x="Page D" stroke={graph.red} />
+            <LineChart data={meanAnalysis!.bill}>
+              <XAxis dataKey="percentage" hide />
+              <ReferenceLine
+                x={meanAnalysis!.changePer.bill}
+                stroke={graph.red}
+              />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="comp"
                 stroke={graph.red}
                 dot={false}
                 animationDuration={1500}
@@ -189,7 +197,7 @@ function RecoReportComponent() {
               />
               <Line
                 type="monotone"
-                dataKey="pv"
+                dataKey="single"
                 stroke={graph.blue}
                 dot={false}
                 animationDuration={1500}
@@ -198,22 +206,25 @@ function RecoReportComponent() {
             </LineChart>
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
-            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
-            <span className="single">단일계약</span> 이하는{" "}
+            공동설비사용량 <b>{meanAnalysis!.changePer.bill}%</b>를 기준으로
+            이상은 <span className="single">단일계약</span> 이하는{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>
         <Flex alignItems="center" justify="center" direction="column">
           <Text textStyle="h5" width="100%">
-            아파트 전체 요금
+            평균 손해율
           </Text>
           <ResponsiveContainer width="100%" height={241}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" hide />
-              <ReferenceLine x="Page D" stroke={graph.red} />
+            <LineChart data={meanAnalysis!.lossRatio}>
+              <XAxis dataKey="percentage" hide />
+              <ReferenceLine
+                x={meanAnalysis!.changePer.lossRatio}
+                stroke={graph.red}
+              />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="comp"
                 stroke={graph.red}
                 dot={false}
                 animationDuration={1500}
@@ -221,7 +232,7 @@ function RecoReportComponent() {
               />
               <Line
                 type="monotone"
-                dataKey="pv"
+                dataKey="single"
                 stroke={graph.blue}
                 dot={false}
                 animationDuration={1500}
@@ -230,22 +241,25 @@ function RecoReportComponent() {
             </LineChart>
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
-            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
-            <span className="single">단일계약</span> 이하는{" "}
+            공동설비사용량 <b>{meanAnalysis!.changePer.lossRatio}%</b>를
+            기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>
         <Flex alignItems="center" justify="center" direction="column">
           <Text textStyle="h5" width="100%">
-            아파트 전체 요금
+            공동설비사용요금
           </Text>
           <ResponsiveContainer width="100%" height={241}>
-            <LineChart data={data}>
-              <XAxis dataKey="name" hide />
-              <ReferenceLine x="Page D" stroke={graph.red} />
+            <LineChart data={meanAnalysis!.publicBill}>
+              <XAxis dataKey="percentage" hide />
+              <ReferenceLine
+                x={meanAnalysis!.changePer.publicBill}
+                stroke={graph.red}
+              />
               <Line
                 type="monotone"
-                dataKey="uv"
+                dataKey="comp"
                 stroke={graph.red}
                 dot={false}
                 animationDuration={1500}
@@ -253,7 +267,7 @@ function RecoReportComponent() {
               />
               <Line
                 type="monotone"
-                dataKey="pv"
+                dataKey="single"
                 stroke={graph.blue}
                 dot={false}
                 animationDuration={1500}
@@ -262,8 +276,8 @@ function RecoReportComponent() {
             </LineChart>
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
-            공동설비사용량 <b>35%</b>를 기준으로 이상은{" "}
-            <span className="single">단일계약</span> 이하는{" "}
+            공동설비사용량 <b>{meanAnalysis!.changePer.publicBill}%</b>를
+            기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>

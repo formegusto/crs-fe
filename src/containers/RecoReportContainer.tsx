@@ -32,7 +32,11 @@ function RecoReportContainer({ report, getProcess, initProcess }: Props) {
     };
   }, [initProcess]);
 
-  return loading ? <RecoReportSkeleton /> : <RecoReportComponent />;
+  return loading ? (
+    <RecoReportSkeleton />
+  ) : (
+    <RecoReportComponent {...report!} />
+  );
 }
 
 export default ProcessConnector(RecoReportContainer);

@@ -14,18 +14,9 @@ import { ConnectedProps } from "react-redux";
 import { Link } from "react-router-dom";
 import { Line, LineChart, ReferenceLine, XAxis } from "recharts";
 import API from "../../api";
-import { PosGraphStep, stepToName } from "../../store/common/viewData";
+import { stepToName } from "../../store/common/viewData";
 import ProcessConnector from "../../store/process/connector";
 import { ReportBase } from "../../store/process/types";
-
-const data = [
-  { name: "Page A", uv: 400, pv: 700, amt: 2400 },
-  { name: "Page B", uv: 300, pv: 400, amt: 2100 },
-  { name: "Page C", uv: 700, pv: 300, amt: 2550 },
-  { name: "Page D", uv: 400, pv: 700, amt: 2400 },
-  { name: "Page E", uv: 300, pv: 400, amt: 2100 },
-  { name: "Page F", uv: 700, pv: 300, amt: 2550 },
-];
 
 type CustomProps = {
   originalReport: ReportBase;
@@ -87,20 +78,24 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
         <Text textStyle="h6" marginBottom="6px">
           {report.title}
         </Text>
-        {PosGraphStep.includes(report.step) ? (
-          <LineChart width={268} height={180} data={data}>
-            <XAxis dataKey="name" hide />
-            <ReferenceLine x="Page D" stroke={graph.red} />
+        {report.meanAnalysis ? (
+          <LineChart
+            width={268}
+            height={180}
+            data={report.meanAnalysis.positiveCount}
+          >
+            <XAxis dataKey="percentage" hide />
+            <ReferenceLine x={report.recoPercentage} stroke={graph.red} />
             <Line
               type="monotone"
-              dataKey="uv"
+              dataKey="comp"
               stroke={graph.red}
               dot={false}
               animationDuration={1500}
             />
             <Line
               type="monotone"
-              dataKey="pv"
+              dataKey="single"
               stroke={graph.blue}
               dot={false}
               animationDuration={1500}
@@ -134,7 +129,7 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
           <Stat>
             <StatLabel color="modern.200">세대 총 사용량</StatLabel>
             <Text textStyle="p2" fontWeight="bold">
-              9,990kWh
+              {report.kwh ? report.kwh.toLocaleString("ko-KR") : "? "}kWh
             </Text>
           </Stat>
           <Stat>
@@ -150,7 +145,7 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
             <StatHelpText opacity={1}>
               <StatArrow type="increase" color="graph.red" />
               <Text textStyle="p2" fontWeight="bold" as="span">
-                35%
+                {report.recoPercentage ? report.recoPercentage : "? "}%
               </Text>
             </StatHelpText>
           </Stat>
@@ -159,7 +154,7 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
             <StatHelpText opacity={1}>
               <StatArrow type="decrease" color="graph.blue" />
               <Text textStyle="p2" fontWeight="bold" as="span">
-                35%
+                {report.recoPercentage ? report.recoPercentage : "? "}%
               </Text>
             </StatHelpText>
           </Stat>
