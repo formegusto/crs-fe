@@ -11,6 +11,7 @@ import { Provider } from "react-redux";
 import SocketListener from "./containers/SocketListener";
 import createSagaMW from "redux-saga";
 import RootSaga from "./store/saga";
+import AlertListener from "./containers/AlertListener";
 
 const sagaMW = createSagaMW();
 const store = createStore(
@@ -23,6 +24,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ChakraProvider theme={theme}>
       <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <AlertListener />
       <SocketListener />
       <Router>
         <App />
