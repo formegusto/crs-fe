@@ -272,8 +272,8 @@ function RecoReportComponent({
         </Text>
         <Flex alignItems="center" justify="center">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={dpp?.month_usage}>
-              {dpp!.month_usage.map((m, idx) => (
+            <LineChart data={dpp?.monthUsage}>
+              {dpp!.monthUsage.map((m, idx) => (
                 <Line
                   key={m.name}
                   type="monotone"

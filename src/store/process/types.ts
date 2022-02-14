@@ -47,7 +47,7 @@ export type DataPreprocessing = {
     month: string;
     peak: number;
   }[];
-  month_usage: {
+  monthUsage: {
     [key: number]: number;
     name: string;
   }[];
