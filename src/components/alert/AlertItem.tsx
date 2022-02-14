@@ -7,9 +7,10 @@ import React from "react";
 type Props = {
   isLink?: boolean;
   hideDrawer: () => void;
+  message?: string;
 };
 
-function AlertItem({ isLink, hideDrawer }: Props) {
+function AlertItem({ isLink, hideDrawer, message }: Props) {
   const navigate = useNavigate();
 
   const moveReport = React.useCallback(() => {
@@ -34,8 +35,9 @@ function AlertItem({ isLink, hideDrawer }: Props) {
         </Text>
       </Flex>
       <Box padding="0 20px 0 26px" textStyle="p2">
-        “아파트 10% 80% 시뮬레이팅 보고서 1” 의 평균분석 작업이 완료 됐습니다.
-        유사도 분석 작업을 시작합니다.
+        {message
+          ? message
+          : "“아파트 10% 80% 시뮬레이팅 보고서 1” 의 평균분석 작업이 완료 됐습니다.유사도 분석 작업을 시작합니다."}
       </Box>
       {isLink && (
         <Flex

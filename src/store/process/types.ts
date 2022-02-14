@@ -42,6 +42,9 @@ export type ReportStep =
   | "mean-analysis"
   | "similarity-analysis";
 
+export type MonthUsage = {
+  [key: number | string]: any;
+};
 export type DataPreprocessing = {
   peak: {
     month: string;
@@ -64,7 +67,11 @@ export type ReportBase = {
   recoPercentage?: number;
   kwh?: number;
   meanAnalysis?: Analysis;
-  simAnalysis?: Analysis;
+  simAnalysis?: {
+    analysisData: Analysis;
+    recoIdx: number[];
+    monthUsage: MonthUsage[];
+  };
   dpp?: DataPreprocessing;
 };
 

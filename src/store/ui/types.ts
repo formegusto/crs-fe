@@ -8,6 +8,7 @@ export type Alert = {
   step: string;
   type: string;
   status: boolean;
+  message: string;
   systemConfirm: boolean;
 };
 

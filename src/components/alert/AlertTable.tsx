@@ -1,9 +1,16 @@
 import { Flex } from "@chakra-ui/react";
+import { ConnectedProps } from "react-redux";
+import UIConnector from "../../store/ui/connector";
 import AlertItem from "./AlertItem";
 
-function AlertTable() {
+type Props = ConnectedProps<typeof UIConnector>;
+
+function AlertTable({ alerts }: Props) {
   return (
     <Flex direction="column">
+      {alerts.map((alert) => (
+        <AlertItem message={alert.message} />
+      ))}
       <AlertItem isLink />
       <AlertItem />
       <AlertItem />
@@ -12,4 +19,4 @@ function AlertTable() {
   );
 }
 
-export default AlertTable;
+export default UIConnector(AlertTable);

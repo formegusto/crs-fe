@@ -65,7 +65,7 @@ function RecoReportComponent({
   dpp,
 }: Props) {
   const {
-    colors: { graph },
+    colors: { graph, modern },
   } = useTheme();
 
   return (
@@ -97,7 +97,11 @@ function RecoReportComponent({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={meanAnalysis!.positiveCount}>
               <XAxis dataKey="percentage" hide />
-              <Tooltip />
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
               <ReferenceLine
                 x={meanAnalysis!.changePer.positiveCount}
                 stroke={graph.red}
@@ -137,7 +141,11 @@ function RecoReportComponent({
           <ResponsiveContainer width="100%" height={241}>
             <LineChart data={meanAnalysis!.bill}>
               <XAxis dataKey="percentage" hide />
-              <Tooltip />
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
               <ReferenceLine
                 x={meanAnalysis!.changePer.bill}
                 stroke={graph.red}
@@ -173,7 +181,11 @@ function RecoReportComponent({
           <ResponsiveContainer width="100%" height={241}>
             <LineChart data={meanAnalysis!.lossRatio}>
               <XAxis dataKey="percentage" hide />
-              <Tooltip />
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
               <ReferenceLine
                 x={meanAnalysis!.changePer.lossRatio}
                 stroke={graph.red}
@@ -209,7 +221,11 @@ function RecoReportComponent({
           <ResponsiveContainer width="100%" height={241}>
             <LineChart data={meanAnalysis!.publicBill}>
               <XAxis dataKey="percentage" hide />
-              <Tooltip />
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
               <ReferenceLine
                 x={meanAnalysis!.changePer.publicBill}
                 stroke={graph.red}
@@ -254,7 +270,11 @@ function RecoReportComponent({
             <BarChart data={meanAnalysis!.histogram} barCategoryGap={0}>
               <Bar dataKey="y" fill={graph.green} />
               <XAxis dataKey="x" hide />
-              <Tooltip />
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
             </BarChart>
           </ResponsiveContainer>
         </Flex>
@@ -294,9 +314,46 @@ function RecoReportComponent({
         <>
           <RecoReportItem title="유사도분석치 분석 결과">
             <Text textStyle="h2" fontWeight="thin">
+              1년 사용량 패턴 중에서
+              <br />
+              <b>{simAnalysis!.recoIdx.map((idx) => idx + 1).join(",")}월</b>의
+              <br />
+              평균으로 만들어졌습니다.
+              <br />
+            </Text>
+            <Flex alignItems="center" justify="center">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={simAnalysis!.monthUsage}>
+                  {Object.keys(simAnalysis!.monthUsage[0]).map((k) =>
+                    k === "name" ? (
+                      <></>
+                    ) : (
+                      <Line
+                        key={k}
+                        type="monotone"
+                        dataKey={k}
+                        stroke={graph.green}
+                        dot={false}
+                        isAnimationActive={false}
+                        strokeWidth={k === "mean" ? 2.0 : 0.5}
+                        strokeOpacity={0.7}
+                      />
+                    )
+                  )}
+                  <XAxis dataKey="name" hide />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </Flex>
+            <Text textStyle="h2" fontWeight="thin">
               공동설비사용량
               <br />
-              <b>{simAnalysis!.changePer.positiveCount}%</b>를 기준으로
+              <b>{simAnalysis!.analysisData.changePer.positiveCount}%</b>를
+              기준으로
               <br />
               이상은 <span className="single">단일계약</span>
               <br />
@@ -304,11 +361,15 @@ function RecoReportComponent({
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={simAnalysis!.positiveCount}>
+                <LineChart data={simAnalysis!.analysisData.positiveCount}>
                   <XAxis dataKey="percentage" hide />
-                  <Tooltip />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
                   <ReferenceLine
-                    x={simAnalysis!.changePer.positiveCount}
+                    x={simAnalysis!.analysisData.changePer.positiveCount}
                     stroke={graph.red}
                   />
                   <Line
@@ -344,11 +405,15 @@ function RecoReportComponent({
                 아파트 전체 요금
               </Text>
               <ResponsiveContainer width="100%" height={241}>
-                <LineChart data={simAnalysis!.bill}>
+                <LineChart data={simAnalysis!.analysisData.bill}>
                   <XAxis dataKey="percentage" hide />
-                  <Tooltip />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
                   <ReferenceLine
-                    x={simAnalysis!.changePer.bill}
+                    x={simAnalysis!.analysisData.changePer.bill}
                     stroke={graph.red}
                   />
                   <Line
@@ -370,7 +435,8 @@ function RecoReportComponent({
                 </LineChart>
               </ResponsiveContainer>
               <Text textStyle="p2" width="100%">
-                공동설비사용량 <b>{simAnalysis!.changePer.bill}%</b>를 기준으로
+                공동설비사용량{" "}
+                <b>{simAnalysis!.analysisData.changePer.bill}%</b>를 기준으로
                 이상은 <span className="single">단일계약</span> 이하는{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
@@ -380,11 +446,15 @@ function RecoReportComponent({
                 평균 손해율
               </Text>
               <ResponsiveContainer width="100%" height={241}>
-                <LineChart data={simAnalysis!.lossRatio}>
+                <LineChart data={simAnalysis!.analysisData.lossRatio}>
                   <XAxis dataKey="percentage" hide />
-                  <Tooltip />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
                   <ReferenceLine
-                    x={simAnalysis!.changePer.lossRatio}
+                    x={simAnalysis!.analysisData.changePer.lossRatio}
                     stroke={graph.red}
                   />
                   <Line
@@ -406,7 +476,8 @@ function RecoReportComponent({
                 </LineChart>
               </ResponsiveContainer>
               <Text textStyle="p2" width="100%">
-                공동설비사용량 <b>{simAnalysis!.changePer.lossRatio}%</b>를
+                공동설비사용량{" "}
+                <b>{simAnalysis!.analysisData.changePer.lossRatio}%</b>를
                 기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
@@ -416,11 +487,15 @@ function RecoReportComponent({
                 공동설비사용요금
               </Text>
               <ResponsiveContainer width="100%" height={241}>
-                <LineChart data={simAnalysis!.publicBill}>
+                <LineChart data={simAnalysis!.analysisData.publicBill}>
                   <XAxis dataKey="percentage" hide />
-                  <Tooltip />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
                   <ReferenceLine
-                    x={simAnalysis!.changePer.publicBill}
+                    x={simAnalysis!.analysisData.changePer.publicBill}
                     stroke={graph.red}
                   />
                   <Line
@@ -442,7 +517,8 @@ function RecoReportComponent({
                 </LineChart>
               </ResponsiveContainer>
               <Text textStyle="p2" width="100%">
-                공동설비사용량 <b>{simAnalysis!.changePer.publicBill}%</b>를
+                공동설비사용량{" "}
+                <b>{simAnalysis!.analysisData.changePer.publicBill}%</b>를
                 기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
@@ -460,10 +536,17 @@ function RecoReportComponent({
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={simAnalysis!.histogram} barCategoryGap={0}>
+                <BarChart
+                  data={simAnalysis!.analysisData.histogram}
+                  barCategoryGap={0}
+                >
                   <Bar dataKey="y" fill={graph.green} />
                   <XAxis dataKey="x" hide />
-                  <Tooltip />
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </Flex>

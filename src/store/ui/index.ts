@@ -11,12 +11,14 @@ import {
 type UIStore = {
   drawer?: ControlDrawer | null;
   alert?: Alert | null;
+  alerts: Alert[];
 };
 type Payload = ControlDrawer | Alert | number;
 
 const store: UIStore = {
   drawer: null,
   alert: null,
+  alerts: [],
 };
 const UIReducer = handleActions<UIStore, Payload>(
   {
@@ -31,6 +33,7 @@ const UIReducer = handleActions<UIStore, Payload>(
     [NEW_ALERT]: (state, action) => ({
       ...state,
       alert: action.payload as Alert,
+      alerts: state.alerts.concat(action.payload as Alert),
     }),
     [CONFIRM_ALERT]: (state, action) => ({
       ...state,
