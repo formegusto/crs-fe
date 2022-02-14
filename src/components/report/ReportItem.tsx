@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { ConnectedProps } from "react-redux";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Line, LineChart, ReferenceLine, XAxis } from "recharts";
 import API from "../../api";
 import { stepToName } from "../../store/common/viewData";
@@ -25,6 +25,7 @@ type CustomProps = {
 interface Props extends ConnectedProps<typeof ProcessConnector>, CustomProps {}
 
 function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
+  const navigate = useNavigate();
   const id = React.useState<string>(originalReport._id);
   const [report, setReport] = React.useState<ReportBase>(originalReport);
   const {
@@ -43,6 +44,14 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
     }
   }, [id, confirmAlert]);
 
+  const moveRecoReport = React.useCallback(() => {
+    navigate("/report", {
+      state: {
+        id: id[0],
+      },
+    });
+  }, [id, navigate]);
+
   React.useEffect(() => {
     if (alert) {
       if (alert.id === id[0]) {
@@ -53,114 +62,111 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
   }, [alert, id]);
 
   return (
-    <Link
-      to="/report"
-      state={{
-        id: id[0],
-      }}
+    <Box
+      className="report-item"
+      border="1px"
+      borderRadius="16px"
+      borderColor="modeborder"
+      width="292px"
+      boxSizing="border-box"
+      padding="16px 12px"
+      {...(report.step === "similarity-analysis"
+        ? {
+            cursor: "pointer",
+            sx: {
+              "& .recharts-wrapper": {
+                cursor: "pointer !important",
+              },
+            },
+            onClick: moveRecoReport,
+          }
+        : {})}
     >
-      <Box
-        className="report-item"
-        border="1px"
-        borderRadius="16px"
-        borderColor="modeborder"
-        width="292px"
-        boxSizing="border-box"
-        padding="16px 12px"
-        cursor="pointer"
-        transition="0.3s"
-        sx={{
-          "& .recharts-wrapper": {
-            cursor: "pointer !important",
-          },
-        }}
-      >
-        <Text textStyle="h6" marginBottom="6px">
-          {report.title}
-        </Text>
-        {report.meanAnalysis ? (
-          <LineChart
-            width={268}
-            height={180}
-            data={report.meanAnalysis.positiveCount}
-          >
-            <XAxis dataKey="percentage" hide />
-            <ReferenceLine x={report.recoPercentage} stroke={graph.red} />
-            <Line
-              type="monotone"
-              dataKey="comp"
-              stroke={graph.red}
-              dot={false}
-              animationDuration={1500}
-            />
-            <Line
-              type="monotone"
-              dataKey="single"
-              stroke={graph.blue}
-              dot={false}
-              animationDuration={1500}
-            />
-          </LineChart>
-        ) : (
-          <Flex
-            width="268px"
-            height="180px"
-            justify="center"
-            align="center"
-            direction="column"
-          >
-            <Spinner
-              size="lg"
-              speed="1.5s"
-              thickness="4px"
-              color="modetext"
-              mb={8}
-            />
-            <Text textStyle="p2">
-              현재 <b>"{stepToName[report.step]}"</b>단계 진행중입니다.
-            </Text>
-            <Text textStyle="p2">
-              평균분석이 완료되면 결과를 확인할 수 있습니다.
-            </Text>
-          </Flex>
-        )}
+      <Text textStyle="h6" marginBottom="6px">
+        {report.title}
+      </Text>
+      {report.meanAnalysis ? (
+        <LineChart
+          width={268}
+          height={180}
+          data={report.meanAnalysis.positiveCount}
+        >
+          <XAxis dataKey="percentage" hide />
+          <ReferenceLine x={report.recoPercentage} stroke={graph.red} />
+          <Line
+            type="monotone"
+            dataKey="comp"
+            stroke={graph.red}
+            dot={false}
+            animationDuration={1500}
+          />
+          <Line
+            type="monotone"
+            dataKey="single"
+            stroke={graph.blue}
+            dot={false}
+            animationDuration={1500}
+          />
+        </LineChart>
+      ) : (
+        <Flex
+          width="268px"
+          height="180px"
+          justify="center"
+          align="center"
+          direction="column"
+        >
+          <Spinner
+            size="lg"
+            speed="1.5s"
+            thickness="4px"
+            color="modetext"
+            mb={8}
+          />
+          <Text textStyle="p2">
+            현재 <b>"{stepToName[report.step]}"</b>단계 진행중입니다.
+          </Text>
+          <Text textStyle="p2">
+            평균분석이 완료되면 결과를 확인할 수 있습니다.
+          </Text>
+        </Flex>
+      )}
 
-        <Box display="flex" marginBottom="8px">
-          <Stat>
-            <StatLabel color="modern.200">세대 총 사용량</StatLabel>
-            <Text textStyle="p2" fontWeight="bold">
-              {report.kwh ? report.kwh.toLocaleString("ko-KR") : "? "}kWh
-            </Text>
-          </Stat>
-          <Stat>
-            <StatLabel color="modern.200">공동설비사용량</StatLabel>
-            <Text textStyle="p2" fontWeight="bold">
-              {report.minPer}% ~ {report.maxPer}%
-            </Text>
-          </Stat>
-        </Box>
-        <Box display="flex">
-          <Stat>
-            <StatLabel color="modern.200">종합계약</StatLabel>
-            <StatHelpText opacity={1}>
-              <StatArrow type="increase" color="graph.red" />
-              <Text textStyle="p2" fontWeight="bold" as="span">
-                {report.recoPercentage ? report.recoPercentage : "? "}%
-              </Text>
-            </StatHelpText>
-          </Stat>
-          <Stat>
-            <StatLabel color="modern.200">종합계약</StatLabel>
-            <StatHelpText opacity={1}>
-              <StatArrow type="decrease" color="graph.blue" />
-              <Text textStyle="p2" fontWeight="bold" as="span">
-                {report.recoPercentage ? report.recoPercentage : "? "}%
-              </Text>
-            </StatHelpText>
-          </Stat>
-        </Box>
+      <Box display="flex" marginBottom="8px">
+        <Stat>
+          <StatLabel color="modern.200">세대 총 사용량</StatLabel>
+          <Text textStyle="p2" fontWeight="bold">
+            {report.kwh ? report.kwh.toLocaleString("ko-KR") : "? "}kWh
+          </Text>
+        </Stat>
+        <Stat>
+          <StatLabel color="modern.200">공동설비사용량</StatLabel>
+          <Text textStyle="p2" fontWeight="bold">
+            {report.minPer}% ~ {report.maxPer}%
+          </Text>
+        </Stat>
       </Box>
-    </Link>
+      <Box display="flex">
+        <Stat>
+          <StatLabel color="modern.200">종합계약</StatLabel>
+          <StatHelpText opacity={1}>
+            <StatArrow type="increase" color="graph.red" />
+            <Text textStyle="p2" fontWeight="bold" as="span">
+              {report.recoPercentage ? report.recoPercentage : "? "}%
+            </Text>
+          </StatHelpText>
+        </Stat>
+        <Stat>
+          <StatLabel color="modern.200">종합계약</StatLabel>
+          <StatHelpText opacity={1}>
+            <StatArrow type="decrease" color="graph.blue" />
+            <Text textStyle="p2" fontWeight="bold" as="span">
+              {report.recoPercentage ? report.recoPercentage : "? "}%
+            </Text>
+          </StatHelpText>
+        </Stat>
+      </Box>
+    </Box>
   );
 }
 

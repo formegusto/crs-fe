@@ -18,12 +18,18 @@ export type ChangePer = {
   [key: string]: number;
 };
 
+export type Histogram = {
+  x: number[];
+  y: number[];
+};
+
 export type Analysis = {
   positiveCount: PercentageItem[];
   lossRatio: PercentageItem[];
   bill: PercentageItem[];
   publicBill: PercentageItem[];
   changePer: ChangePer;
+  histogram: Histogram[];
 };
 
 export type ReportStep =
@@ -35,6 +41,17 @@ export type ReportStep =
   | "normal-analysis"
   | "mean-analysis"
   | "similarity-analysis";
+
+export type DataPreprocessing = {
+  peak: {
+    month: string;
+    peak: number;
+  }[];
+  month_usage: {
+    [key: number]: number;
+    name: string;
+  }[];
+};
 
 export type ReportBase = {
   _id: string;
@@ -48,6 +65,7 @@ export type ReportBase = {
   kwh?: number;
   meanAnalysis?: Analysis;
   simAnalysis?: Analysis;
+  dpp?: DataPreprocessing;
 };
 
 // Redux Action Types

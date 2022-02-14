@@ -29,11 +29,13 @@ function Report({ getProcessList, reports }: Props) {
       flexWrap="wrap"
       flex="1"
       overflowY="scroll"
+      justifyContent="flex-start"
+      alignItems="flex-start"
       sx={{
-        a: {
+        "& > .report-item": {
           marginBottom: "16px",
         },
-        "a:not(:nth-of-type(3n))": {
+        "& > .report-item:not(:nth-of-type(3n))": {
           marginRight: "24px",
         },
       }}

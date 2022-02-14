@@ -17,7 +17,8 @@ function AlertListener({ alert }: Props) {
         description: "새 변경사항을 확인해주세요.",
       });
     }
-  }, [alert, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alert]);
 
   return <></>;
 }
