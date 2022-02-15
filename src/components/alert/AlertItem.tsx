@@ -3,23 +3,27 @@ import { CheckCircleIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import UIConnector from "../../store/ui/connector";
 import React from "react";
+import { Alert } from "../../store/ui/types";
+import { ConnectedProps } from "react-redux";
 
-type Props = {
-  isLink?: boolean;
-  hideDrawer: () => void;
-  message?: string;
-};
+type Props = ConnectedProps<typeof UIConnector> & Alert;
 
-function AlertItem({ isLink, hideDrawer, message }: Props) {
+function AlertItem({ hideDrawer, message, step, id }: Props) {
+  const isLink: boolean =
+    step === "mean-analysis" || step === "similarity-analysis";
   const navigate = useNavigate();
 
   const moveReport = React.useCallback(() => {
     hideDrawer();
-    navigate("/report");
-  }, [navigate, hideDrawer]);
+    navigate("/report", {
+      state: {
+        id: id,
+      },
+    });
+  }, [navigate, hideDrawer, id]);
 
   return (
-    <Flex flexDirection="column" paddingBottom={`${isLink ? "20px" : "28px"}`}>
+    <Flex flexDirection="column" paddingBottom={isLink ? "20px" : "28px"}>
       <Flex
         direction="row"
         padding="0 20px 0"
@@ -35,9 +39,7 @@ function AlertItem({ isLink, hideDrawer, message }: Props) {
         </Text>
       </Flex>
       <Box padding="0 20px 0 26px" textStyle="p2">
-        {message
-          ? message
-          : "“아파트 10% 80% 시뮬레이팅 보고서 1” 의 평균분석 작업이 완료 됐습니다.유사도 분석 작업을 시작합니다."}
+        {message}
       </Box>
       {isLink && (
         <Flex
@@ -55,7 +57,7 @@ function AlertItem({ isLink, hideDrawer, message }: Props) {
             as="a"
             onClick={moveReport}
           >
-            평균분석 결과 확인 하기
+            결과 확인 하기
           </Text>
         </Flex>
       )}

@@ -85,15 +85,15 @@ function RecoReportComponent({
     >
       <RecoReportItem title="평균치 분석 결과">
         <Text textStyle="h2" fontWeight="thin">
-          공동설비사용량
+          유리 가구 수 측면에서
           <br />
-          <b>{recoPercentage}%</b>를 기준으로
+          공동설비사용량 <b>{recoPercentage}%</b>
           <br />
           이상은 <span className="single">단일계약</span>
           <br />
           이하는 <span className="comp">종합계약</span>이 적합해요.
         </Text>
-        <Flex alignItems="center" justify="center">
+        <Flex alignItems="center" justify="center" direction="column">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={meanAnalysis!.positiveCount}>
               <XAxis dataKey="percentage" hide />
@@ -107,6 +107,7 @@ function RecoReportComponent({
                 stroke={graph.red}
               />
               <Line
+                name="종합계약"
                 type="monotone"
                 dataKey="comp"
                 stroke={graph.red}
@@ -115,6 +116,7 @@ function RecoReportComponent({
                 strokeWidth={2}
               />
               <Line
+                name="단일계약"
                 type="monotone"
                 dataKey="single"
                 stroke={graph.blue}
@@ -151,6 +153,7 @@ function RecoReportComponent({
                 stroke={graph.red}
               />
               <Line
+                name="종합계약"
                 type="monotone"
                 dataKey="comp"
                 stroke={graph.red}
@@ -159,6 +162,7 @@ function RecoReportComponent({
                 strokeWidth={2}
               />
               <Line
+                name="단일계약"
                 type="monotone"
                 dataKey="single"
                 stroke={graph.blue}
@@ -191,6 +195,7 @@ function RecoReportComponent({
                 stroke={graph.red}
               />
               <Line
+                name="종합계약"
                 type="monotone"
                 dataKey="comp"
                 stroke={graph.red}
@@ -199,6 +204,7 @@ function RecoReportComponent({
                 strokeWidth={2}
               />
               <Line
+                name="단일계약"
                 type="monotone"
                 dataKey="single"
                 stroke={graph.blue}
@@ -231,6 +237,7 @@ function RecoReportComponent({
                 stroke={graph.red}
               />
               <Line
+                name="종합계약"
                 type="monotone"
                 dataKey="comp"
                 stroke={graph.red}
@@ -239,6 +246,7 @@ function RecoReportComponent({
                 strokeWidth={2}
               />
               <Line
+                name="단일계약"
                 type="monotone"
                 dataKey="single"
                 stroke={graph.blue}
@@ -268,7 +276,7 @@ function RecoReportComponent({
         <Flex alignItems="center" justify="center">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={meanAnalysis!.histogram} barCategoryGap={0}>
-              <Bar dataKey="y" fill={graph.green} />
+              <Bar name="가구 수" dataKey="y" fill={graph.green} />
               <XAxis dataKey="x" hide />
               <Tooltip
                 labelStyle={{
@@ -295,6 +303,7 @@ function RecoReportComponent({
             <LineChart data={dpp?.monthUsage}>
               {dpp!.monthUsage.map((m, idx) => (
                 <Line
+                  name={`${idx + 1}월`}
                   key={m.name}
                   type="monotone"
                   dataKey={idx + 1}
@@ -314,12 +323,31 @@ function RecoReportComponent({
         <>
           <RecoReportItem title="유사도분석치 분석 결과">
             <Text textStyle="h2" fontWeight="thin">
-              1년 사용량 패턴 중에서
-              <br />
-              <b>{simAnalysis!.recoIdx.map((idx) => idx + 1).join(",")}월</b>의
-              <br />
-              평균으로 만들어졌습니다.
-              <br />
+              {simAnalysis!.recoIdx.length === 1 ? (
+                <>
+                  1년 사용량 패턴 중에서
+                  <br />
+                  <b>
+                    {simAnalysis!.recoIdx.map((idx) => idx + 1).join(",")}월
+                  </b>
+                  이
+                  <br />
+                  가장 유사도가 높은 패턴입니다.
+                  <br />
+                </>
+              ) : (
+                <>
+                  1년 사용량 패턴 중에서
+                  <br />
+                  <b>
+                    {simAnalysis!.recoIdx.map((idx) => idx + 1).join(",")}월
+                  </b>
+                  의
+                  <br />
+                  평균으로 만들어졌습니다.
+                  <br />
+                </>
+              )}
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
@@ -329,8 +357,9 @@ function RecoReportComponent({
                       <></>
                     ) : (
                       <Line
-                        key={k}
+                        key={k + "-similarity"}
                         type="monotone"
+                        name={k !== "mean" ? `${k}월` : "유사도분석치"}
                         dataKey={k}
                         stroke={graph.green}
                         dot={false}
@@ -350,10 +379,10 @@ function RecoReportComponent({
               </ResponsiveContainer>
             </Flex>
             <Text textStyle="h2" fontWeight="thin">
-              공동설비사용량
+              유리 가구 수 측면에서
               <br />
-              <b>{simAnalysis!.analysisData.changePer.positiveCount}%</b>를
-              기준으로
+              공동설비사용량{" "}
+              <b>{simAnalysis!.analysisData.changePer.positiveCount}%</b>
               <br />
               이상은 <span className="single">단일계약</span>
               <br />
@@ -373,6 +402,7 @@ function RecoReportComponent({
                     stroke={graph.red}
                   />
                   <Line
+                    name="종합계약"
                     type="monotone"
                     dataKey="comp"
                     stroke={graph.red}
@@ -381,6 +411,7 @@ function RecoReportComponent({
                     strokeWidth={2}
                   />
                   <Line
+                    name="단일계약"
                     type="monotone"
                     dataKey="single"
                     stroke={graph.blue}
@@ -417,6 +448,7 @@ function RecoReportComponent({
                     stroke={graph.red}
                   />
                   <Line
+                    name="종합계약"
                     type="monotone"
                     dataKey="comp"
                     stroke={graph.red}
@@ -425,6 +457,7 @@ function RecoReportComponent({
                     strokeWidth={2}
                   />
                   <Line
+                    name="단일계약"
                     type="monotone"
                     dataKey="single"
                     stroke={graph.blue}
@@ -458,6 +491,7 @@ function RecoReportComponent({
                     stroke={graph.red}
                   />
                   <Line
+                    name="종합계약"
                     type="monotone"
                     dataKey="comp"
                     stroke={graph.red}
@@ -466,6 +500,7 @@ function RecoReportComponent({
                     strokeWidth={2}
                   />
                   <Line
+                    name="단일계약"
                     type="monotone"
                     dataKey="single"
                     stroke={graph.blue}
@@ -499,6 +534,7 @@ function RecoReportComponent({
                     stroke={graph.red}
                   />
                   <Line
+                    name="종합계약"
                     type="monotone"
                     dataKey="comp"
                     stroke={graph.red}
@@ -507,6 +543,7 @@ function RecoReportComponent({
                     strokeWidth={2}
                   />
                   <Line
+                    name="단일계약"
                     type="monotone"
                     dataKey="single"
                     stroke={graph.blue}
@@ -540,7 +577,7 @@ function RecoReportComponent({
                   data={simAnalysis!.analysisData.histogram}
                   barCategoryGap={0}
                 >
-                  <Bar dataKey="y" fill={graph.green} />
+                  <Bar name="가구 수" dataKey="y" fill={graph.green} />
                   <XAxis dataKey="x" hide />
                   <Tooltip
                     labelStyle={{

@@ -26,3 +26,4 @@ yarn-error.log*
 *.js.map
 
 .env
+dist

@@ -8,13 +8,9 @@ type Props = ConnectedProps<typeof UIConnector>;
 function AlertTable({ alerts }: Props) {
   return (
     <Flex direction="column">
-      {alerts.map((alert) => (
-        <AlertItem message={alert.message} />
+      {alerts.reverse().map((alert) => (
+        <AlertItem {...alert} key={alert.id + alert.step} />
       ))}
-      <AlertItem isLink />
-      <AlertItem />
-      <AlertItem />
-      <AlertItem />
     </Flex>
   );
 }
