@@ -8,6 +8,7 @@ import {
   ResponsiveContainer,
   XAxis,
   Tooltip,
+  Cell,
 } from "recharts";
 import { ReportBase } from "../store/process/types";
 
@@ -89,9 +90,9 @@ function RecoReportComponent({
           <br />
           공동설비사용량 <b>{recoPercentage}%</b>
           <br />
-          이상은 <span className="single">단일계약</span>
+          이하는 <span className="single">단일계약</span>
           <br />
-          이하는 <span className="comp">종합계약</span>이 적합해요.
+          이상은 <span className="comp">종합계약</span>이 적합해요.
         </Text>
         <Flex alignItems="center" justify="center" direction="column">
           <ResponsiveContainer width="100%" height="100%">
@@ -103,7 +104,7 @@ function RecoReportComponent({
                 }}
               />
               <ReferenceLine
-                x={meanAnalysis!.changePer.positiveCount}
+                x={meanAnalysis!.changePer.positiveCount + "%"}
                 stroke={graph.red}
               />
               <Line
@@ -149,7 +150,7 @@ function RecoReportComponent({
                 }}
               />
               <ReferenceLine
-                x={meanAnalysis!.changePer.bill}
+                x={meanAnalysis!.changePer.bill + "%"}
                 stroke={graph.red}
               />
               <Line
@@ -174,7 +175,7 @@ function RecoReportComponent({
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
             공동설비사용량 <b>{meanAnalysis!.changePer.bill}%</b>를 기준으로
-            이상은 <span className="single">단일계약</span> 이하는{" "}
+            이하는 <span className="single">단일계약</span> 이상은{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>
@@ -191,7 +192,7 @@ function RecoReportComponent({
                 }}
               />
               <ReferenceLine
-                x={meanAnalysis!.changePer.lossRatio}
+                x={meanAnalysis!.changePer.lossRatio + "%"}
                 stroke={graph.red}
               />
               <Line
@@ -216,7 +217,7 @@ function RecoReportComponent({
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
             공동설비사용량 <b>{meanAnalysis!.changePer.lossRatio}%</b>를
-            기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
+            기준으로 이하는 <span className="single">단일계약</span> 이상은{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>
@@ -233,7 +234,7 @@ function RecoReportComponent({
                 }}
               />
               <ReferenceLine
-                x={meanAnalysis!.changePer.publicBill}
+                x={meanAnalysis!.changePer.publicBill + "%"}
                 stroke={graph.red}
               />
               <Line
@@ -258,25 +259,51 @@ function RecoReportComponent({
           </ResponsiveContainer>
           <Text textStyle="p2" width="100%">
             공동설비사용량 <b>{meanAnalysis!.changePer.publicBill}%</b>를
-            기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
+            기준으로 이하는 <span className="single">단일계약</span> 이상은{" "}
             <span className="comp">종합계약</span>이 적합해요.
           </Text>
         </Flex>
       </RecoReportItem>
       <RecoReportItem title="가구별 평균 한 달 사용량 분포">
         <Text textStyle="h2" fontWeight="thin">
-          고르게 분포되어 있지 않으면
-          <br />
-          공동설비사용량이 증가할 때
-          <br />
-          단일계약상에서
-          <br />
-          형평성의 문제가 발생해요.
+          {meanAnalysis!.histWin === "min" ? (
+            <>
+              해당 아파트는
+              <br />
+              최소사용량 가구 쪽에
+              <br />
+              분포를 많이 보여줍니다.
+            </>
+          ) : (
+            <>
+              해당 아파트는
+              <br />
+              최대사용량 가구 쪽에
+              <br />
+              분포를 많이 보여줍니다.
+            </>
+          )}
         </Text>
         <Flex alignItems="center" justify="center">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={meanAnalysis!.histogram} barCategoryGap={0}>
-              <Bar name="가구 수" dataKey="y" fill={graph.green} />
+              <Bar name="가구 수" dataKey="y">
+                {meanAnalysis!.histogram.map((h, idx) => (
+                  <Cell
+                    key={`mean-histogram-${idx}`}
+                    cursor="pointer"
+                    fill={
+                      meanAnalysis!.histWin === "min"
+                        ? idx <= meanAnalysis!.histMean
+                          ? graph.lightGreen
+                          : graph.darkGreen
+                        : idx >= meanAnalysis!.histMean
+                        ? graph.lightGreen
+                        : graph.darkGreen
+                    }
+                  />
+                ))}
+              </Bar>
               <XAxis dataKey="x" hide />
               <Tooltip
                 labelStyle={{
@@ -384,9 +411,9 @@ function RecoReportComponent({
               공동설비사용량{" "}
               <b>{simAnalysis!.analysisData.changePer.positiveCount}%</b>
               <br />
-              이상은 <span className="single">단일계약</span>
+              이하는 <span className="single">단일계약</span>
               <br />
-              이하는 <span className="comp">종합계약</span>이 적합해요.
+              이상은 <span className="comp">종합계약</span>이 적합해요.
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
@@ -398,7 +425,7 @@ function RecoReportComponent({
                     }}
                   />
                   <ReferenceLine
-                    x={simAnalysis!.analysisData.changePer.positiveCount}
+                    x={simAnalysis!.analysisData.changePer.positiveCount + "%"}
                     stroke={graph.red}
                   />
                   <Line
@@ -444,7 +471,7 @@ function RecoReportComponent({
                     }}
                   />
                   <ReferenceLine
-                    x={simAnalysis!.analysisData.changePer.bill}
+                    x={simAnalysis!.analysisData.changePer.bill + "%"}
                     stroke={graph.red}
                   />
                   <Line
@@ -470,7 +497,7 @@ function RecoReportComponent({
               <Text textStyle="p2" width="100%">
                 공동설비사용량{" "}
                 <b>{simAnalysis!.analysisData.changePer.bill}%</b>를 기준으로
-                이상은 <span className="single">단일계약</span> 이하는{" "}
+                이하는 <span className="single">단일계약</span> 이상은{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
             </Flex>
@@ -487,7 +514,7 @@ function RecoReportComponent({
                     }}
                   />
                   <ReferenceLine
-                    x={simAnalysis!.analysisData.changePer.lossRatio}
+                    x={simAnalysis!.analysisData.changePer.lossRatio + "%"}
                     stroke={graph.red}
                   />
                   <Line
@@ -513,7 +540,7 @@ function RecoReportComponent({
               <Text textStyle="p2" width="100%">
                 공동설비사용량{" "}
                 <b>{simAnalysis!.analysisData.changePer.lossRatio}%</b>를
-                기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
+                기준으로 이하는 <span className="single">단일계약</span> 이상은{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
             </Flex>
@@ -530,7 +557,7 @@ function RecoReportComponent({
                     }}
                   />
                   <ReferenceLine
-                    x={simAnalysis!.analysisData.changePer.publicBill}
+                    x={simAnalysis!.analysisData.changePer.publicBill + "%"}
                     stroke={graph.red}
                   />
                   <Line
@@ -556,20 +583,30 @@ function RecoReportComponent({
               <Text textStyle="p2" width="100%">
                 공동설비사용량{" "}
                 <b>{simAnalysis!.analysisData.changePer.publicBill}%</b>를
-                기준으로 이상은 <span className="single">단일계약</span> 이하는{" "}
+                기준으로 이하는 <span className="single">단일계약</span> 이상은{" "}
                 <span className="comp">종합계약</span>이 적합해요.
               </Text>
             </Flex>
           </RecoReportItem>
           <RecoReportItem title="가구별 평균 한 달 사용량 분포">
             <Text textStyle="h2" fontWeight="thin">
-              고르게 분포되어 있지 않으면
-              <br />
-              공동설비사용량이 증가할 때
-              <br />
-              단일계약상에서
-              <br />
-              형평성의 문제가 발생해요.
+              {simAnalysis!.analysisData.histWin === "min" ? (
+                <>
+                  해당 아파트는
+                  <br />
+                  최소사용량 가구 쪽에
+                  <br />
+                  분포를 많이 보여줍니다.
+                </>
+              ) : (
+                <>
+                  해당 아파트는
+                  <br />
+                  최대사용량 가구 쪽에
+                  <br />
+                  분포를 많이 보여줍니다.
+                </>
+              )}
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
@@ -577,7 +614,23 @@ function RecoReportComponent({
                   data={simAnalysis!.analysisData.histogram}
                   barCategoryGap={0}
                 >
-                  <Bar name="가구 수" dataKey="y" fill={graph.green} />
+                  <Bar name="가구 수" dataKey="y">
+                    {simAnalysis!.analysisData.histogram.map((h, idx) => (
+                      <Cell
+                        key={`sim-histogram-${idx}`}
+                        cursor="pointer"
+                        fill={
+                          simAnalysis!.analysisData.histWin === "min"
+                            ? idx <= simAnalysis!.analysisData.histMean
+                              ? graph.lightGreen
+                              : graph.darkGreen
+                            : idx >= simAnalysis!.analysisData.histMean
+                            ? graph.lightGreen
+                            : graph.darkGreen
+                        }
+                      />
+                    ))}
+                  </Bar>
                   <XAxis dataKey="x" hide />
                   <Tooltip
                     labelStyle={{

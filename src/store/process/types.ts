@@ -30,6 +30,8 @@ export type Analysis = {
   publicBill: PercentageItem[];
   changePer: ChangePer;
   histogram: Histogram[];
+  histMean: number;
+  histWin: "min" | "max" | "draw";
 };
 
 export type ReportStep =

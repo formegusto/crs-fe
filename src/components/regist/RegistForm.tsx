@@ -143,6 +143,7 @@ function RegistForm({ regist, initialFocus, hideDrawer }: Props) {
                       return;
                     }
                   }}
+                  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                 />
               )}
             />
