@@ -19,7 +19,7 @@ export type ChangePer = {
 };
 
 export type Histogram = {
-  x: number[];
+  x: string[];
   y: number[];
 };
 
