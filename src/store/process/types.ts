@@ -19,8 +19,9 @@ export type ChangePer = {
 };
 
 export type Histogram = {
-  x: string[];
-  y: number[];
+  x: string;
+  y: number;
+  rank: number;
 };
 
 export type Analysis = {
@@ -30,8 +31,10 @@ export type Analysis = {
   publicBill: PercentageItem[];
   changePer: ChangePer;
   histogram: Histogram[];
-  histMean: number;
-  histWin: "min" | "max" | "draw";
+  targetKwhs: number[];
+  targetChks: number[];
+  rank: number[];
+  histWin: "min" | "max" | "median";
 };
 
 export type ReportStep =

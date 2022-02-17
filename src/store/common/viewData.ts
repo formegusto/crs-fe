@@ -12,3 +12,11 @@ export const stepToName: { [type: string]: string } = {
   "mean-analysis": "평균 분석",
   "similarity-analysis": "유사도 분석",
 };
+
+export const usageToName: { [type: string]: string } = {
+  min: "최소사용량",
+  median: "평균사용량",
+  max: "최대사용량",
+};
+
+export const usageNames = ["최소사용량", "평균사용량", "최대사용량"];

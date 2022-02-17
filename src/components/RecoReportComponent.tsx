@@ -9,7 +9,10 @@ import {
   XAxis,
   Tooltip,
   Cell,
+  ReferenceDot,
+  Label,
 } from "recharts";
+import { usageNames, usageToName } from "../store/common/viewData";
 import { ReportBase } from "../store/process/types";
 
 type ItemProps = {
@@ -49,6 +52,12 @@ function RecoReportItem({
           "& .comp": {
             color: "graph.red",
           },
+          "& .recharts-surface": {
+            overflow: "visible",
+          },
+          "& tspan": {
+            fill: "modetext",
+          },
         }}
       >
         {children}
@@ -63,6 +72,7 @@ function RecoReportComponent({
   recoPercentage,
   simAnalysis,
   meanAnalysis,
+  minPer,
   dpp,
 }: Props) {
   const {
@@ -266,23 +276,16 @@ function RecoReportComponent({
       </RecoReportItem>
       <RecoReportItem title="가구별 평균 한 달 사용량 분포">
         <Text textStyle="h2" fontWeight="thin">
-          {meanAnalysis!.histWin === "min" ? (
-            <>
-              해당 아파트는
-              <br />
-              최소사용량 가구 쪽에
-              <br />
-              분포를 많이 보여줍니다.
-            </>
-          ) : (
-            <>
-              해당 아파트는
-              <br />
-              최대사용량 가구 쪽에
-              <br />
-              분포를 많이 보여줍니다.
-            </>
-          )}
+          <>
+            해당 아파트는
+            <br />
+            <Text className="usage" as="span" color={graph.green[50]}>
+              <b>{usageToName[simAnalysis!.analysisData.histWin]}</b>
+            </Text>{" "}
+            가구 쪽에
+            <br />
+            분포를 많이 보여줍니다.
+          </>
         </Text>
         <Flex alignItems="center" justify="center">
           <ResponsiveContainer width="100%" height="100%">
@@ -293,13 +296,11 @@ function RecoReportComponent({
                     key={`mean-histogram-${idx}`}
                     cursor="pointer"
                     fill={
-                      meanAnalysis!.histWin === "min"
-                        ? idx <= meanAnalysis!.histMean
-                          ? graph.lightGreen
-                          : graph.darkGreen
-                        : idx >= meanAnalysis!.histMean
-                        ? graph.lightGreen
-                        : graph.darkGreen
+                      h.rank === 0
+                        ? graph.green[200]
+                        : h.rank === 1
+                        ? graph.green[100]
+                        : graph.green[50]
                     }
                   />
                 ))}
@@ -313,6 +314,76 @@ function RecoReportComponent({
             </BarChart>
           </ResponsiveContainer>
         </Flex>
+        <Flex alignItems="center" justify="center" direction="column">
+          <Text textStyle="h5" width="100%">
+            가구별 최종청구금액 종합계약 유리지점 비교
+          </Text>
+          <ResponsiveContainer width="100%" height={241}>
+            <LineChart>
+              <XAxis
+                dataKey="percentage"
+                type="category"
+                hide
+                allowDuplicatedCategory={false}
+              />
+              <ReferenceLine
+                x={meanAnalysis!.changePer.positiveCount + "%"}
+                stroke={graph.red}
+                strokeWidth={0.1}
+              />
+              <Line
+                name="종합계약 유리가구 수"
+                type="monotone"
+                data={meanAnalysis!.positiveCount}
+                dataKey="comp"
+                stroke={graph.red}
+                dot={false}
+                animationDuration={1500}
+                strokeWidth={0.1}
+                key={"종합계약 유리가구 수"}
+              />
+              {meanAnalysis!.targetChks.map((chk, idx) => (
+                <ReferenceDot
+                  key={`mean-analysis-check-${chk}-${idx}`}
+                  x={`${chk}%`}
+                  y={meanAnalysis!.positiveCount[chk - minPer]["comp"]}
+                  r={8}
+                  fill={
+                    meanAnalysis!.rank[idx] === 0
+                      ? graph.green[200]
+                      : meanAnalysis!.rank[idx] === 1
+                      ? graph.green[100]
+                      : graph.green[50]
+                  }
+                  stroke="none"
+                >
+                  <Label
+                    value={`${usageNames[idx]} 가구 유리지점`}
+                    offset={5}
+                    position="right"
+                    fontSize={10}
+                    fontFamily="'Spoqa Han Sans Neo', 'sans-serif'"
+                    fontWeight={500}
+                  />
+                </ReferenceDot>
+              ))}
+              <Tooltip
+                labelStyle={{
+                  color: modern[500],
+                }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </Flex>
+        <Text textStyle="h2" fontWeight="thin">
+          단일계약은
+          <br />
+          공동설비사용량이 늘어날수록
+          <br />
+          최소사용량 가구가
+          <br />
+          손해를 보는 계약입니다.
+        </Text>
       </RecoReportItem>
       <Box />
       <RecoReportItem title="유사도분석치">
@@ -334,7 +405,7 @@ function RecoReportComponent({
                   key={m.name}
                   type="monotone"
                   dataKey={idx + 1}
-                  stroke={graph.green}
+                  stroke={graph.green[100]}
                   dot={false}
                   isAnimationActive={false}
                   strokeWidth={0.5}
@@ -345,7 +416,6 @@ function RecoReportComponent({
           </ResponsiveContainer>
         </Flex>
       </RecoReportItem>
-
       {simAnalysis ? (
         <>
           <RecoReportItem title="유사도분석치 분석 결과">
@@ -388,7 +458,7 @@ function RecoReportComponent({
                         type="monotone"
                         name={k !== "mean" ? `${k}월` : "유사도분석치"}
                         dataKey={k}
-                        stroke={graph.green}
+                        stroke={graph.green[100]}
                         dot={false}
                         isAnimationActive={false}
                         strokeWidth={k === "mean" ? 2.0 : 0.5}
@@ -590,23 +660,16 @@ function RecoReportComponent({
           </RecoReportItem>
           <RecoReportItem title="가구별 평균 한 달 사용량 분포">
             <Text textStyle="h2" fontWeight="thin">
-              {simAnalysis!.analysisData.histWin === "min" ? (
-                <>
-                  해당 아파트는
-                  <br />
-                  최소사용량 가구 쪽에
-                  <br />
-                  분포를 많이 보여줍니다.
-                </>
-              ) : (
-                <>
-                  해당 아파트는
-                  <br />
-                  최대사용량 가구 쪽에
-                  <br />
-                  분포를 많이 보여줍니다.
-                </>
-              )}
+              <>
+                해당 아파트는
+                <br />
+                <Text className="usage" as="span" color={graph.green[50]}>
+                  <b>{usageToName[simAnalysis!.analysisData.histWin]}</b>
+                </Text>
+                가구 쪽에
+                <br />
+                분포를 많이 보여줍니다.
+              </>
             </Text>
             <Flex alignItems="center" justify="center">
               <ResponsiveContainer width="100%" height="100%">
@@ -620,13 +683,11 @@ function RecoReportComponent({
                         key={`sim-histogram-${idx}`}
                         cursor="pointer"
                         fill={
-                          simAnalysis!.analysisData.histWin === "min"
-                            ? idx <= simAnalysis!.analysisData.histMean
-                              ? graph.lightGreen
-                              : graph.darkGreen
-                            : idx >= simAnalysis!.analysisData.histMean
-                            ? graph.lightGreen
-                            : graph.darkGreen
+                          h.rank === 0
+                            ? graph.green[200]
+                            : h.rank === 1
+                            ? graph.green[100]
+                            : graph.green[50]
                         }
                       />
                     ))}
@@ -640,6 +701,80 @@ function RecoReportComponent({
                 </BarChart>
               </ResponsiveContainer>
             </Flex>
+            <Flex alignItems="center" justify="center" direction="column">
+              <Text textStyle="h5" width="100%">
+                가구별 최종청구금액 종합계약 유리지점 비교
+              </Text>
+              <ResponsiveContainer width="100%" height={241}>
+                <LineChart>
+                  <XAxis
+                    dataKey="percentage"
+                    type="category"
+                    hide
+                    allowDuplicatedCategory={false}
+                  />
+                  <ReferenceLine
+                    x={simAnalysis!.analysisData.changePer.positiveCount + "%"}
+                    stroke={graph.red}
+                    strokeWidth={0.1}
+                  />
+                  <Line
+                    name="종합계약 유리가구 수"
+                    type="monotone"
+                    data={simAnalysis!.analysisData.positiveCount}
+                    dataKey="comp"
+                    stroke={graph.red}
+                    dot={false}
+                    animationDuration={1500}
+                    strokeWidth={0.1}
+                    key={"종합계약 유리가구 수"}
+                  />
+                  {simAnalysis!.analysisData.targetChks.map((chk, idx) => (
+                    <ReferenceDot
+                      key={`similarity-analysis-check-${chk}-${idx}`}
+                      x={`${chk}%`}
+                      y={
+                        simAnalysis!.analysisData.positiveCount[chk - minPer][
+                          "comp"
+                        ]
+                      }
+                      r={8}
+                      fill={
+                        simAnalysis!.analysisData.rank[idx] === 0
+                          ? graph.green[200]
+                          : simAnalysis!.analysisData.rank[idx] === 1
+                          ? graph.green[100]
+                          : graph.green[50]
+                      }
+                      stroke="none"
+                    >
+                      <Label
+                        value={`${usageNames[idx]} 가구 유리지점`}
+                        offset={5}
+                        position="right"
+                        fontSize={10}
+                        fontFamily="'Spoqa Han Sans Neo', 'sans-serif'"
+                        fontWeight={500}
+                      />
+                    </ReferenceDot>
+                  ))}
+                  <Tooltip
+                    labelStyle={{
+                      color: modern[500],
+                    }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </Flex>
+            <Text textStyle="h2" fontWeight="thin">
+              단일계약은
+              <br />
+              공동설비사용량이 늘어날수록
+              <br />
+              최소사용량 가구가
+              <br />
+              손해를 보는 계약입니다.
+            </Text>
           </RecoReportItem>
         </>
       ) : (

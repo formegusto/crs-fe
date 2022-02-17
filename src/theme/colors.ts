@@ -9,6 +9,7 @@ const ColorTheme = {
       500: "#202020",
       600: "#121215",
     },
+
     border: {
       50: "#E2E8F0",
     },
@@ -18,9 +19,11 @@ const ColorTheme = {
     },
     graph: {
       red: "#E92B41",
-      green: "#1EBF6C",
-      darkGreen: "#0A4024",
-      lightGreen: "#21CC73",
+      green: {
+        50: "#21CC73",
+        100: "#1EBF6C",
+        200: "#0A4024",
+      },
       blue: "#2768F2",
     },
     blueinput: {
