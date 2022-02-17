@@ -1,4 +1,4 @@
-import { Box, Flex, Text, useTheme } from "@chakra-ui/react";
+import { Box, Flex, Icon, Text, useTheme } from "@chakra-ui/react";
 import {
   Bar,
   BarChart,
@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { usageNames, usageToName } from "../store/common/viewData";
 import { ReportBase } from "../store/process/types";
+import { IoAlertCircleSharp } from "react-icons/io5";
 
 type ItemProps = {
   title?: string;
@@ -315,7 +316,7 @@ function RecoReportComponent({
           </ResponsiveContainer>
         </Flex>
         <Flex alignItems="center" justify="center" direction="column">
-          <Text textStyle="h5" width="100%">
+          <Text textStyle="h5" width="100%" mb={4}>
             가구별 최종청구금액 종합계약 유리지점 비교
           </Text>
           <ResponsiveContainer width="100%" height={241}>
@@ -330,7 +331,16 @@ function RecoReportComponent({
                 x={meanAnalysis!.changePer.positiveCount + "%"}
                 stroke={graph.red}
                 strokeWidth={0.1}
-              />
+              >
+                <Label
+                  value={`종합계약 유리지점`}
+                  offset={-20}
+                  position="top"
+                  fontSize={10}
+                  fontFamily="'Spoqa Han Sans Neo', 'sans-serif'"
+                  fontWeight={500}
+                />
+              </ReferenceLine>
               <Line
                 name="종합계약 유리가구 수"
                 type="monotone"
@@ -341,6 +351,17 @@ function RecoReportComponent({
                 animationDuration={1500}
                 strokeWidth={0.1}
                 key={"종합계약 유리가구 수"}
+              />
+              <Line
+                name="단일계약 유리가구 수"
+                type="monotone"
+                data={meanAnalysis!.positiveCount}
+                dataKey="single"
+                stroke={graph.blue}
+                dot={false}
+                animationDuration={1500}
+                strokeWidth={0.1}
+                key={"단일계약 유리가구 수"}
               />
               {meanAnalysis!.targetChks.map((chk, idx) => (
                 <ReferenceDot
@@ -358,7 +379,15 @@ function RecoReportComponent({
                   stroke="none"
                 >
                   <Label
-                    value={`${usageNames[idx]} 가구 유리지점`}
+                    value={`${usageNames[idx]} 가구`}
+                    offset={16}
+                    position="insideBottomLeft"
+                    fontSize={10}
+                    fontFamily="'Spoqa Han Sans Neo', 'sans-serif'"
+                    fontWeight={500}
+                  />
+                  <Label
+                    value={`(${meanAnalysis!.targetKwhs[idx]} kWh)`}
                     offset={5}
                     position="right"
                     fontSize={10}
@@ -383,6 +412,34 @@ function RecoReportComponent({
           최소사용량 가구가
           <br />
           손해를 보는 계약입니다.
+          <Flex
+            direction="row"
+            wrap="nowrap"
+            alignItems="flex-start"
+            mt={6}
+            width="100%"
+          >
+            <Icon as={IoAlertCircleSharp} textStyle="h6" marginRight="6px" />
+            <Text textStyle="p2" flex={1}>
+              최소사용량 가구의 분포가 적을 경우, 최소사용량 가구의 유리지점과
+              <br />
+              아파트 종합계약 유리지점 간의 거리가 멀어집니다.
+            </Text>
+          </Flex>
+          <Flex
+            direction="row"
+            wrap="nowrap"
+            alignItems="flex-start"
+            mt={2}
+            width="100%"
+          >
+            <Icon as={IoAlertCircleSharp} textStyle="h6" marginRight="6px" />
+            <Text textStyle="p2" flex={1}>
+              최소사용량 가구의 분포가 2순위여도 가장 많은 분포를 가진 그룹과
+              <br />
+              누진세 단계가 다르다면, 거리가 멀어집니다.
+            </Text>
+          </Flex>
         </Text>
       </RecoReportItem>
       <Box />
@@ -729,6 +786,17 @@ function RecoReportComponent({
                     strokeWidth={0.1}
                     key={"종합계약 유리가구 수"}
                   />
+                  <Line
+                    name="단일계약 유리가구 수"
+                    type="monotone"
+                    data={simAnalysis!.analysisData.positiveCount}
+                    dataKey="single"
+                    stroke={graph.blue}
+                    dot={false}
+                    animationDuration={1500}
+                    strokeWidth={0.1}
+                    key={"단일계약 유리가구 수"}
+                  />
                   {simAnalysis!.analysisData.targetChks.map((chk, idx) => (
                     <ReferenceDot
                       key={`similarity-analysis-check-${chk}-${idx}`}
@@ -749,7 +817,17 @@ function RecoReportComponent({
                       stroke="none"
                     >
                       <Label
-                        value={`${usageNames[idx]} 가구 유리지점`}
+                        value={`${usageNames[idx]} 가구`}
+                        offset={16}
+                        position="insideBottomLeft"
+                        fontSize={10}
+                        fontFamily="'Spoqa Han Sans Neo', 'sans-serif'"
+                        fontWeight={500}
+                      />
+                      <Label
+                        value={`(${
+                          simAnalysis!.analysisData.targetKwhs[idx]
+                        } kWh)`}
                         offset={5}
                         position="right"
                         fontSize={10}
@@ -774,6 +852,44 @@ function RecoReportComponent({
               최소사용량 가구가
               <br />
               손해를 보는 계약입니다.
+              <Flex
+                direction="row"
+                wrap="nowrap"
+                alignItems="flex-start"
+                mt={6}
+                width="100%"
+              >
+                <Icon
+                  as={IoAlertCircleSharp}
+                  textStyle="h6"
+                  marginRight="6px"
+                />
+                <Text textStyle="p2" flex={1}>
+                  최소사용량 가구의 분포가 적을 경우, 최소사용량 가구의
+                  유리지점과
+                  <br />
+                  아파트 종합계약 유리지점 간의 거리가 멀어집니다.
+                </Text>
+              </Flex>
+              <Flex
+                direction="row"
+                wrap="nowrap"
+                alignItems="flex-start"
+                mt={2}
+                width="100%"
+              >
+                <Icon
+                  as={IoAlertCircleSharp}
+                  textStyle="h6"
+                  marginRight="6px"
+                />
+                <Text textStyle="p2" flex={1}>
+                  최소사용량 가구의 분포가 2순위여도 가장 많은 분포를 가진
+                  그룹과
+                  <br />
+                  누진세 단계가 다르다면, 거리가 멀어집니다.
+                </Text>
+              </Flex>
             </Text>
           </RecoReportItem>
         </>
