@@ -157,7 +157,7 @@ function ReportItem({ confirmAlert, ui: { alert }, originalReport }: Props) {
           </StatHelpText>
         </Stat>
         <Stat>
-          <StatLabel color="modern.200">종합계약</StatLabel>
+          <StatLabel color="modern.200">단일계약</StatLabel>
           <StatHelpText opacity={1}>
             <StatArrow type="decrease" color="graph.blue" />
             <Text textStyle="p2" fontWeight="bold" as="span">
